@@ -1,5 +1,9 @@
 # Unreleased
 
+**Breaking:**
+- bpk-component-map:
+  - Removed all exports except for `BpkMap` and `withScriptJs`.
+
 **Added:**
 - react-native-bpk-component-carousel-indicator:
   - Introducing the React Native carousel indicator component.
