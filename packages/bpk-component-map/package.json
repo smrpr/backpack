@@ -13,11 +13,11 @@
     "react": "^15.0.0 || ^16.0.0"
   },
   "dependencies": {
+    "prop-types": "^15.5.8",
     "react-google-maps": "^9.4.5"
   },
   "devDependencies": {
     "bpk-component-icon": "^3.21.1",
-    "bpk-component-tooltip": "^3.1.15",
-    "prop-types": "^15.5.8"
+    "bpk-component-text": "^1.0.61"
   }
 }

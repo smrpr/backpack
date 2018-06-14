@@ -18,11 +18,107 @@
 
 /* @flow */
 
-import React from 'react';
+import React, { type Node } from 'react';
+import PropTypes from 'prop-types';
 import { withGoogleMap, GoogleMap } from 'react-google-maps';
 
-const BpkMap = withGoogleMap(({ mapRef, ...rest }) => (
-  <GoogleMap ref={mapRef} {...rest} />
-));
+type MapRef = ?{
+  getBounds: () => Object,
+  getCenter: () => Object,
+  getZoom: () => number,
+  fitBounds: ({
+    south: number,
+    west: number,
+    north: number,
+    east: number,
+  }) => void,
+};
+
+type Props = {
+  containerElement: Node,
+  mapElement: Node,
+  region: {
+    latitude: number,
+    longitude: number,
+  },
+  scrollEnabled: boolean,
+  zoom: number,
+  zoomEnabled: boolean,
+  children: ?Node,
+  mapRef: ?(?HTMLInputElement) => mixed,
+  onRegionChange: ?({ [string]: any }, { [string]: any }) => mixed,
+  onZoom: ?(number) => mixed,
+};
+
+const BpkMap = withGoogleMap((props: Props) => {
+  const {
+    children,
+    mapRef,
+    onRegionChange,
+    onZoom,
+    region,
+    scrollEnabled,
+    zoom,
+    zoomEnabled,
+  } = props;
+  let ref: MapRef = null;
+  return (
+    <GoogleMap
+      ref={map => {
+        ref = map;
+        if (mapRef) {
+          mapRef(map);
+        }
+      }}
+      defaultCenter={{
+        lat: region.latitude,
+        lng: region.longitude,
+      }}
+      defaultZoom={zoom}
+      options={{
+        gestureHandling: scrollEnabled ? 'auto' : 'none',
+        zoomControl: zoomEnabled,
+      }}
+      onDragEnd={() => {
+        if (ref && onRegionChange) {
+          onRegionChange(ref.getBounds(), ref.getCenter());
+        }
+      }}
+      onZoomChanged={() => {
+        if (ref && onZoom) {
+          onZoom(ref.getZoom());
+        }
+      }}
+    >
+      {children}
+    </GoogleMap>
+  );
+});
+
+BpkMap.propTypes = {
+  containerElement: PropTypes.node.isRequired,
+  mapElement: PropTypes.node.isRequired,
+  region: PropTypes.shape({
+    latitude: PropTypes.number.isRequired,
+    longitude: PropTypes.number.isRequired,
+  }).isRequired,
+  children: PropTypes.node,
+  mapRef: PropTypes.func,
+  onRegionChange: PropTypes.func,
+  onZoom: PropTypes.func,
+  scrollEnabled: PropTypes.bool,
+  zoom: PropTypes.number,
+  zoomEnabled: PropTypes.bool,
+};
+
+BpkMap.defaultProps = {
+  children: null,
+  mapRef: null,
+  onRegionChange: null,
+  onZoom: null,
+  scrollEnabled: true,
+  zoom: 15,
+  zoomEnabled: true,
+};
 
 export default BpkMap;

@@ -12,22 +12,25 @@ npm install bpk-component-map --save-dev
 
 ```js
 import React from 'react';
-import BpkMap from 'bpk-component-map';
+import BpkText from 'bpk-component-text';
+import BpkMap, { BpkOverlayView } from 'bpk-component-map';
 
 export default () => (
   <BpkMap
     containerElement={<div style={{ height: '400px' }} />}
     mapElement={<div style={{ height: `100%` }} />}
-    defaultZoom={15}
-    defaultCenter={{
-      lat: 27.9881,
-      lng: 86.925,
+    zoom={15}
+    zoomEnabled={false}
+    scrollEnabled={false}
+    region={{
+      latitude: 27.9881,
+      longitude: 86.925,
     }}
-    options={{
-      zoomControl: false,
-      dragEnabled: false,
-    }}
-  />
+  >
+    <BpkOverlayView position={{ latitude: 27.9881, longitude: 86.925 }}>
+      <BpkText>Shibuya Crossing</BpkText>
+    </BpkOverlayView>
+  <BpkMap>
 );
 ```
 
@@ -53,15 +56,13 @@ export default () => (
     loadingElement={<div />}
     containerElement={<div style={{ height: '400px' }} />}
     mapElement={<div style={{ height: `100%` }} />}
-    defaultZoom={15}
-    defaultCenter={{
-      lat: 27.9881,
-      lng: 86.925,
+    zoom={15}
+    region={{
+      latitide: 27.9881,
+      longitude: 86.925,
     }}
-    options={{
-      zoomControl: false,
-      dragEnabled: false,
-    }}
+    zoomEnabled={false}
+    scrollEnabled={false}
   />
 );
 ```
@@ -70,12 +71,39 @@ export default () => (
 
 ### BpkMap
 
-| Property	      | PropType	| Required                	| Default Value |
-| --------------- | --------- | ------------------------- | ------------- |
-| mapRef          | func      | false                     | null          |
+| Property	       | PropType                                     | Required                 | Default Value |
+| ---------------- | -------------------------------------------- | ------------------------ | ------------- |
+| containerElement | node                                         | true                     | -             |
+| mapElement       | node                                         | true                     | -             |
+| region           | shape({latitude: number, longitude: number}) | true                     | -             |
+| mapRef           | func                                         | false                    | null          |
+| onRegionChange   | func                                         | false                    | null          |
+| onZoom           | func                                         | false                    | null          |
+| scrollEnabled    | bool                                         | false                    | true          |
+| zoom             | number                                       | false                    | 15            |
+| zoomEnabled      | bool                                         | false                    | true          |
 
-When using `withScriptjs`, some additional props are required. Refer to [`withScriptjs` from `react-google-maps`](https://tomchentw.github.io/react-google-maps/#withscriptjs).
+When using `withScriptjs`, some additional props are required:
 
-Refer to [`GoogleMap` from `react-google-maps`](https://tomchentw.github.io/react-google-maps/#withgooglemap) for all other props.
+| Property	       | PropType                                     | Required                 | Default Value |
+| ---------------- | -------------------------------------------- | ------------------------ | ------------- |
+| googleMapURL     | string                                       | true                     | -             |
+| loadingElement   | node                                         | true                     | -             |
 
-> Note: `bpk-component-map` also exports everything that `react-google-maps` does, such as `InfoBox` and `OverlayView`.
+### BpkOverlayView
+
+| Property	       | PropType                                     | Required                 | Default Value      |
+| ---------------- | -------------------------------------------- | ------------------------ | ------------------ |
+| children         | node                                         | true                     | -                  |
+| position         | shape({latitude: number, longitude: number}) | true                     | -                  |
+| mapPaneName      | oneOf(MAP_PANE_NAMES)                        | false                    | overlayMouseTarget |
+
+
+## Methods
+
+### BpkMap
+
+* `fitBounds(south, west, north, east)`
+* `getBounds`
+* `getCenter`
+* `getZoom`

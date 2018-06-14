@@ -2,7 +2,9 @@
 
 **Breaking:**
 - bpk-component-map:
-  - Removed all exports except for `BpkMap` and `withScriptJs`.
+  - Removed all exports except for `BpkMap`, `BpkOverlayView` and `withScriptJs`.
+  - Introduced `BpkOverlayView` component to replace `OverlayView`.
+  - Simplified `BpkMap`'s props by removing unused ones and renaming others.
 
 **Added:**
 - react-native-bpk-component-carousel-indicator:

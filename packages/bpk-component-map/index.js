@@ -19,6 +19,8 @@
 /* @flow */
 
 import BpkMap from './src/BpkMap';
+import BpkOverlayView from './src/BpkOverlayView';
 
 export default BpkMap;
-export { withScriptjs, Marker } from 'react-google-maps';
+export { BpkOverlayView };
+export { withScriptjs } from 'react-google-maps';
